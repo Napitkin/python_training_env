@@ -1,13 +1,6 @@
-# -*- coding: utf-8 -*-
 from selenium import webdriver
-from group import Group
-from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import NoAlertPresentException
-import unittest
-
-
-class TestAddGroup(unittest.TestCase):
-    def setUp(self):
+class Application:
+    def __init__(self):
         self.wd = webdriver.Firefox()
         self.wd.implicitly_wait(30)
 
@@ -54,34 +47,5 @@ class TestAddGroup(unittest.TestCase):
         wd = self.wd
         wd.find_element_by_link_text("Logout").click()
 
-    def test_add_group(self):
-        self.login("admin", "secret")
-        self.open_groups_page()
-        self.create_group(Group("Keks", "Keks1", "KeksGroup"))
-        self.logout()
-
-    def test_add_empty_group(self):
-        self.login("admin", "secret")
-        self.create_group(Group("", "", ""))
-        self.logout()
-
-    def is_element_present(self, how, what):
-        try:
-            self.wd.find_element(by=how, value=what)
-        except NoSuchElementException as e:
-            return False
-        return True
-
-    def is_alert_present(self):
-        try:
-            self.wd.switch_to_alert()
-        except NoAlertPresentException as e:
-            return False
-        return True
-
-    def tearDown(self):
+    def destroy(self):
         self.wd.quit()
-
-
-if __name__ == "__main__":
-    unittest.main()
