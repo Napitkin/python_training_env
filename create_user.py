@@ -12,10 +12,13 @@ class CreateUser(unittest.TestCase):
         self.wd = webdriver.Firefox()
         self.wd.implicitly_wait(30)
 
-    def open_home_page(self, wd):
+    def open_home_page(self):
+        wd = self.wd
         wd.get("http://localhost/addressbook/")
 
-    def login(self, wd, username, password):
+    def login(self, username, password):
+        wd = self.wd
+        self.open_home_page()
         wd.find_element_by_name("user").click()
         wd.find_element_by_name("user").clear()
         wd.find_element_by_name("user").send_keys(username)
@@ -24,10 +27,13 @@ class CreateUser(unittest.TestCase):
         wd.find_element_by_name("pass").send_keys(password)
         wd.find_element_by_xpath("//input[@value='Login']").click()
 
-    def open_page_create_user(self, wd):
+    def open_page_create_user(self):
+        wd = self.wd
         wd.find_element_by_link_text("add new").click()
 
-    def create_user(self, wd, User):
+    def create_user(self, User):
+        wd = self.wd
+        self.open_page_create_user()
         # fill user form
         wd.find_element_by_name("firstname").click()
         wd.find_element_by_name("firstname").clear()
@@ -77,33 +83,23 @@ class CreateUser(unittest.TestCase):
         wd.find_element_by_name("ayear").send_keys(User.anniversary_year)
         # click button 'Enter" - create user
         wd.find_element_by_xpath("//div[@id='content']/form/input[20]").click()
+        self.return_to_homepage()
 
-    def return_to_homepage(self, wd):
+    def return_to_homepage(self):
+       wd = self.wd
        wd.find_element_by_link_text("home page").click()
 
-    def logout(self, wd):
+    def logout(self):
+        wd = self.wd
         wd.find_element_by_link_text("Logout").click()
 
     def test_create_user(self):
-        wd = self.wd
-        self.open_home_page(wd)
-        self.login(wd, "admin", "secret")
-        self.open_page_create_user(wd)
-        self.create_user(wd, User("Kirill", "Napitkin", "Napitkin2", "Da", "Rus_Company", "Moscow Kremlin str.",
+        self.login("admin", "secret")
+        self.create_user(User("Kirill", "Napitkin", "Napitkin2", "Da", "Rus_Company", "Moscow Kremlin str.",
                          "7777777", "2222222222", "55555555", "kirill@kirill.ru", "22", "August", "1986",
                          "10", "August", "2000"))
-        self.return_to_homepage(wd)
-        self.logout(wd)
+        self.logout()
 
-    def is_element_present(self, how, what):
-        try: self.wd.find_element(by=how, value=what)
-        except NoSuchElementException as e: return False
-        return True
-    
-    def is_alert_present(self):
-        try: self.wd.switch_to_alert()
-        except NoAlertPresentException as e: return False
-        return True
 
     def tearDown(self):
         self.wd.quit()
