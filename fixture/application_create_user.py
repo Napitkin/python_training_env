@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 
+
 class Application_create_user:
     def __init__(self):
         self.wd = webdriver.Firefox()
@@ -80,8 +81,8 @@ class Application_create_user:
         self.return_to_homepage()
 
     def return_to_homepage(self):
-       wd = self.wd
-       wd.find_element_by_link_text("home page").click()
+        wd = self.wd
+        wd.find_element_by_link_text("home page").click()
 
     def logout(self):
         wd = self.wd
