@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from class_user import User
-from application_create_user import Application_create_user
+from env.model.user import User
+from env.fixture.application_create_user import Application_create_user
 import pytest
 
 
