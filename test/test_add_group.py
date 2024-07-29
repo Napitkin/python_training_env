@@ -9,6 +9,6 @@ def test_add_group(app):
 
 
 def test_add_empty_group(app):
-    # app.session.login("admin", "secret") - При не закомментированной данной строки, тест зависает на странице после создания заполннеой группы.
+    app.session.login("admin", "secret") #- При не закомментированной данной строки, тест зависает на странице после создания заполннеой группы.
     app.group.create(Group("", "", ""))
     app.session.logout()
