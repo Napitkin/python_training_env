@@ -1,4 +1,4 @@
-class UserHelper: #комментарий для коммита
+class UserHelper:
     def __init__(self, app):
         self.app = app
 
