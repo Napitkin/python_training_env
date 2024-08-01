@@ -1,3 +1,6 @@
+from model.user import User
+
+
 class UserHelper:
     def __init__(self, app):
         self.app = app
@@ -37,8 +40,9 @@ class UserHelper:
         wd.find_element_by_name("firstname").click()
         wd.find_element_by_name("firstname").clear()
         wd.find_element_by_name("firstname").send_keys(user.first_name)
-        wd.find_element_by_name("middlename").clear()
-        wd.find_element_by_name("middlename").send_keys(user.middle_name)
+        wd.find_element_by_name("lastname").clear()
+        wd.find_element_by_name("lastname").clear()
+        wd.find_element_by_name("lastname").send_keys(user.last_name)
         wd.find_element_by_name("nickname").click()
         wd.find_element_by_name("nickname").clear()
         wd.find_element_by_name("nickname").send_keys(user.nick_name)
@@ -94,3 +98,19 @@ class UserHelper:
         wd = self.app.wd
         self.open_homepage()
         return len(wd.find_elements_by_name("selected[]"))
+
+    def get_user_list(self):
+        wd = self.app.wd
+        self.open_homepage()
+        users = []
+        for element in wd.find_elements_by_css_selector("tr[name='entry']"):
+            # Перебор 'блоков' Имя и Фамилия
+            blocks = element.find_elements_by_tag_name("td")
+            # Получение id - checkbox
+            checkbox = blocks[0].find_element_by_tag_name("input")
+            id = checkbox.get_attribute("value")
+            # Фамилия, Имя, id
+            first_name = blocks[2].text
+            last_name = blocks[1].text
+            users.append(User(first_name=first_name, last_name=last_name, id=id))
+        return users

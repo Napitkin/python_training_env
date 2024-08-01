@@ -1,8 +1,8 @@
 class User:
-    def __init__(self, first_name, middle_name, nick_name, title, company, address, tel_home, tel_mobile, tel_work, email, b_day, b_month, b_year, anniversary_day, anniversary_month,
-                 anniversary_year):
+    def __init__(self, first_name=None, last_name=None, nick_name=None, title=None, company=None, address=None, tel_home=None, tel_mobile=None, tel_work=None, email=None, b_day=None, b_month=None, b_year=None, anniversary_day=None, anniversary_month=None,
+                 anniversary_year=None, id=None):
         self.first_name = first_name
-        self.middle_name = middle_name
+        self.last_name = last_name
         self.nick_name = nick_name
         self.title = title
         self.company = company
@@ -17,3 +17,4 @@ class User:
         self.anniversary_day = anniversary_day
         self.anniversary_month = anniversary_month
         self.anniversary_year = anniversary_year
+        self.id = id
