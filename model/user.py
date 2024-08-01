@@ -1,5 +1,9 @@
+from sys import maxsize
+
+
 class User:
-    def __init__(self, first_name=None, last_name=None, nick_name=None, title=None, company=None, address=None, tel_home=None, tel_mobile=None, tel_work=None, email=None, b_day=None, b_month=None, b_year=None, anniversary_day=None, anniversary_month=None,
+    def __init__(self, first_name=None, last_name=None, nick_name=None, title=None, company=None, address=None, tel_home=None, tel_mobile=None, tel_work=None, email=None, b_day=None, b_month=None,
+                 b_year=None, anniversary_day=None, anniversary_month=None,
                  anniversary_year=None, id=None):
         self.first_name = first_name
         self.last_name = last_name
@@ -18,3 +22,15 @@ class User:
         self.anniversary_month = anniversary_month
         self.anniversary_year = anniversary_year
         self.id = id
+
+    def __repr__(self):
+        return "%s:%s:%s" % (self.id, self.first_name, self.last_name)
+
+    def __eq__(self, other):
+        return (self.id is None or other.id is None or self.id == other.id) and self.first_name == other.first_name and self.last_name == other.last_name
+
+    def id_or_max(self):
+        if self.id:
+            return int(self.id)
+        else:
+            return maxsize
