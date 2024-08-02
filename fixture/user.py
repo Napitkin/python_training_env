@@ -16,9 +16,13 @@ class UserHelper:
         # После успешного метода (create) кэш сбрасываем
         self.user_cache = None
 
-    def modify_first_user(self, user):
+    def modify_first_user(self):
+        self.modify_user_by_index(0)
+
+    def modify_user_by_index(self, index, user):
         wd = self.app.wd
         self.open_homepage()
+        self.select_user_by_index(index)
         # select first user
         wd.find_element_by_name("selected[]").click()
         # click button 'Edit"
@@ -30,11 +34,18 @@ class UserHelper:
         # После успешного метода (modify) кэш сбрасываем
         self.user_cache = None
 
+    def select_user_by_index(self, index):
+        wd = self.app.wd
+        # Получение всех checkbox's по index - порядковому номеру
+        wd.find_elements_by_name("selected[]")[index].click()
+
     def delete_first_user(self):
+        self.delete_user_by_index(0)
+
+    def delete_user_by_index(self, index):
         wd = self.app.wd
         self.open_homepage()
-        # select first user
-        wd.find_element_by_name("selected[]").click()
+        self.select_user_by_index(index)
         # submit deletion
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         # После успешного метода (delete) кэш сбрасываем
