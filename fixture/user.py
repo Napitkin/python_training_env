@@ -13,6 +13,8 @@ class UserHelper:
         # click button 'Enter" - create user
         wd.find_element_by_xpath("//div[@id='content']/form/input[20]").click()
         self.return_to_homepage()
+        # После успешного метода (create) кэш сбрасываем
+        self.user_cache = None
 
     def modify_first_user(self, user):
         wd = self.app.wd
@@ -25,6 +27,8 @@ class UserHelper:
         self.method_filling_user_form(user)
         # click button 'update" - modify user
         wd.find_element_by_name("update").click()
+        # После успешного метода (modify) кэш сбрасываем
+        self.user_cache = None
 
     def delete_first_user(self):
         wd = self.app.wd
@@ -33,6 +37,8 @@ class UserHelper:
         wd.find_element_by_name("selected[]").click()
         # submit deletion
         wd.find_element_by_xpath("//input[@value='Delete']").click()
+        # После успешного метода (delete) кэш сбрасываем
+        self.user_cache = None
 
     # Заполнение формы Пользователя (User)
     def method_filling_user_form(self, user):
@@ -99,18 +105,23 @@ class UserHelper:
         self.open_homepage()
         return len(wd.find_elements_by_name("selected[]"))
 
+    # Возвращаем кэшированное значение (если оно доступно)
+    user_cache = None
+
     def get_user_list(self):
-        wd = self.app.wd
-        self.open_homepage()
-        users = []
-        for element in wd.find_elements_by_css_selector("tr[name='entry']"):
-            # Перебор 'блоков' Имя и Фамилия
-            blocks = element.find_elements_by_tag_name("td")
-            # Получение id - checkbox
-            checkbox = blocks[0].find_element_by_tag_name("input")
-            id = checkbox.get_attribute("value")
-            # Фамилия, Имя, id
-            first_name = blocks[2].text
-            last_name = blocks[1].text
-            users.append(User(first_name=first_name, last_name=last_name, id=id))
-        return users
+        if self.user_cache is None:
+            wd = self.app.wd
+            self.open_homepage()
+            self.user_cache = []
+            for element in wd.find_elements_by_css_selector("tr[name='entry']"):
+                # Перебор 'блоков' Имя и Фамилия
+                blocks = element.find_elements_by_tag_name("td")
+                # Получение id - checkbox
+                checkbox = blocks[0].find_element_by_tag_name("input")
+                id = checkbox.get_attribute("value")
+                # Фамилия, Имя, id
+                first_name = blocks[2].text
+                last_name = blocks[1].text
+                self.user_cache.append(User(first_name=first_name, last_name=last_name, id=id))
+        # Возвращеам не сам кэш, а его копию
+        return list(self.user_cache)
