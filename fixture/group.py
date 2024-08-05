@@ -53,6 +53,8 @@ class GroupHelper:
         wd.find_element_by_name("group_footer").send_keys("Keks_Group_new1")
         wd.find_element_by_name("update").click()
         self.return_to_groups_page()
+        # После успешного метода (create) кэш сбрасываем
+        self.group_cache = None
 
     def select_first_group(self):
         self.select_group_by_index(0)
