@@ -30,7 +30,7 @@ class UserHelper:
         self.method_filling_user_form(user)
         # click button 'update" - modify user
         wd.find_element_by_name("update").click()
-        self.return_to_homepage()
+        # self.return_to_homepage()
         # После успешного метода (modify) кэш сбрасываем
         self.user_cache = None
 
@@ -124,7 +124,8 @@ class UserHelper:
             wd = self.app.wd
             self.open_homepage()
             self.user_cache = []
-            for element in wd.find_elements_by_css_selector("tr[name='entry']"):
+            elements = wd.find_elements_by_css_selector("tr[name='entry']")
+            for element in elements:
                 # Перебор 'блоков' Имя и Фамилия
                 blocks = element.find_elements_by_tag_name("td")
                 # Получение id - checkbox
@@ -136,3 +137,15 @@ class UserHelper:
                 self.user_cache.append(User(first_name=first_name, last_name=last_name, id=id))
         # Возвращеам не сам кэш, а его копию
         return list(self.user_cache)
+
+    def get_group_list(self):
+        if self.group_cache is None:
+            wd = self.app.wd
+            self.open_groups_page()
+            self.group_cache = []
+            for element in wd.find_elements_by_css_selector("span.group"):
+                text = element.text
+                id = element.find_element_by_name("selected[]").get_attribute("value")
+                self.group_cache.append(Group(name=text, id=id))
+        # Возвращеам не сам кэш, а его копию
+        return list(self.group_cache)
