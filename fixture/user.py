@@ -30,6 +30,7 @@ class UserHelper:
         self.method_filling_user_form(user)
         # click button 'update" - modify user
         wd.find_element_by_name("update").click()
+        self.return_to_homepage()
         # После успешного метода (modify) кэш сбрасываем
         self.user_cache = None
 
