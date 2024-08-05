@@ -1,5 +1,5 @@
 from model.user import User
-
+import re
 
 class UserHelper:
     def __init__(self, app):
@@ -59,17 +59,6 @@ class UserHelper:
         wd.find_element_by_name("lastname").clear()
         wd.find_element_by_name("lastname").clear()
         wd.find_element_by_name("lastname").send_keys(user.last_name)
-        wd.find_element_by_name("nickname").click()
-        wd.find_element_by_name("nickname").clear()
-        wd.find_element_by_name("nickname").send_keys(user.nick_name)
-        wd.find_element_by_name("title").click()
-        wd.find_element_by_name("title").clear()
-        wd.find_element_by_name("title").send_keys(user.title)
-        wd.find_element_by_name("company").clear()
-        wd.find_element_by_name("company").send_keys(user.company)
-        wd.find_element_by_name("address").click()
-        wd.find_element_by_name("address").clear()
-        wd.find_element_by_name("address").send_keys(user.address)
         wd.find_element_by_name("home").click()
         wd.find_element_by_name("home").clear()
         wd.find_element_by_name("home").send_keys(user.tel_home)
@@ -79,23 +68,9 @@ class UserHelper:
         wd.find_element_by_name("work").click()
         wd.find_element_by_name("work").clear()
         wd.find_element_by_name("work").send_keys(user.tel_work)
-        wd.find_element_by_name("email").click()
-        wd.find_element_by_name("email").clear()
-        wd.find_element_by_name("email").send_keys(user.email)
-        wd.find_element_by_name("bday").click()
-        wd.find_element_by_xpath("//option[@value='22']").click()
-        wd.find_element_by_name("bmonth").click()
-        wd.find_element_by_xpath("//option[@value='August']").click()
-        wd.find_element_by_name("byear").click()
-        wd.find_element_by_name("byear").clear()
-        wd.find_element_by_name("byear").send_keys(user.b_year)
-        wd.find_element_by_name("aday").click()
-        wd.find_element_by_xpath("//div[@id='content']/form/select[3]/option[12]").click()
-        wd.find_element_by_name("amonth").click()
-        wd.find_element_by_xpath("//div[@id='content']/form/select[4]/option[9]").click()
-        wd.find_element_by_name("ayear").click()
-        wd.find_element_by_name("ayear").clear()
-        wd.find_element_by_name("ayear").send_keys(user.anniversary_year)
+        wd.find_element_by_name("fax").click()
+        wd.find_element_by_name("fax").clear()
+        wd.find_element_by_name("fax").send_keys(user.tel_fax)
 
     def open_homepage(self):
         wd = self.app.wd
@@ -110,6 +85,13 @@ class UserHelper:
         wd = self.app.wd
         wd.find_element_by_link_text("home page").click()
 
+    # Страница просмотра карточки пользователя
+    def open_user_view_by_index(self, index):
+        wd = self.app.wd
+        self.open_homepage()
+        self.select_user_by_index(index)
+        wd.find_element_by_xpath("//img[@alt='Details']").click()
+
     def count(self):
         wd = self.app.wd
         self.open_homepage()
@@ -121,18 +103,43 @@ class UserHelper:
     def get_user_list(self):
         if self.user_cache is None:
             wd = self.app.wd
-            self.open_homepage()
+            self.app.open_homepage()
             self.user_cache = []
-            elements = wd.find_elements_by_css_selector("tr[name='entry']")
-            for element in elements:
-                # Перебор 'блоков' Имя и Фамилия
+            for element in wd.find_elements_by_name("entry"):
                 blocks = element.find_elements_by_tag_name("td")
-                # Получение id - checkbox
-                checkbox = blocks[0].find_element_by_tag_name("input")
-                id = checkbox.get_attribute("value")
-                # Фамилия, Имя, id
                 first_name = blocks[2].text
                 last_name = blocks[1].text
-                self.user_cache.append(User(first_name=first_name, last_name=last_name, id=id))
+                id = blocks[0].find_element_by_tag_name("input").get_attribute("value")
+                all_phones = blocks[5].text.splitlines()
+                # Фамилия, Имя, id
+                self.user_cache.append(User(first_name=first_name, last_name=last_name, id=id, tel_home=all_phones[0], tel_mobile=all_phones[1], tel_work=all_phones[2]))
         # Возвращеам не сам кэш, а его копию
         return list(self.user_cache)
+
+    # Читаем данные (фамилия, имя, телефоны) в окне редактирование пользователя.
+    def get_user_info_from_edit_page(self, index):
+        wd = self.app.wd
+        self.open_homepage()
+        # select random user
+        self.select_user_by_index(index)
+        wd.find_element_by_xpath("//img[@alt='Edit']").click()
+        first_name = wd.find_element_by_name("firstname").get_attribute("value")
+        last_name = wd.find_element_by_name("lastname").get_attribute("value")
+        id = wd.find_element_by_name("id").get_attribute("value")
+        tel_home = wd.find_element_by_name("home").get_attribute("value")
+        tel_mobile = wd.find_element_by_name("mobile").get_attribute("value")
+        tel_work = wd.find_element_by_name("work").get_attribute("value")
+        tel_fax = wd.find_element_by_name("fax").get_attribute("value")
+        return User(first_name=first_name, last_name=last_name, id=id,
+                    tel_home=tel_home, tel_mobile=tel_mobile, tel_work=tel_work, tel_fax=tel_fax)
+
+    def get_user_from_view_page(self, index):
+        wd = self.app.wd
+        self.open_user_view_by_index(index)
+        text = wd.find_element_by_id("content").text
+        tel_home = re.search("H: (.*)", text).group(1)
+        tel_mobile = re.search("M: (.*)", text).group(1)
+        tel_work = re.search("W: (.*)", text).group(1)
+        tel_fax = re.search("F: (.*)", text).group(1)
+        return User(tel_home=tel_home, tel_mobile=tel_mobile, tel_work=tel_work, tel_fax=tel_fax)
+
