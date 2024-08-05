@@ -22,9 +22,8 @@ class UserHelper:
     def modify_user_by_index(self, index, user):
         wd = self.app.wd
         self.open_homepage()
+        # select random user
         self.select_user_by_index(index)
-        # select first user
-        wd.find_element_by_name("selected[]").click()
         # click button 'Edit"
         wd.find_element_by_xpath("//img[@alt='Edit']").click()
         # fill user form
