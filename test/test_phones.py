@@ -1,7 +1,7 @@
 import re
 
 
-def test_phones_on_home_page(app):
+def test_names_emails_phones_and_address_on_home_page(app):
     user_from_home_page = app.user.get_user_list()[0]
     user_from_edit_page = app.user.get_user_info_from_edit_page(0)
     assert user_from_home_page.all_phones_from_home_page == merge_phones_like_on_home_page(user_from_edit_page)

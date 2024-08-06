@@ -157,7 +157,7 @@ class UserHelper:
         wd = self.app.wd
         self.open_user_view_by_index(index)
         text = wd.find_element_by_id("content").text
-        tel_home = re.search("H: (.*)", text).group(1)
+        tel_home = re.search("H:(.*)", text).group(1)
         tel_mobile = re.search("M: (.*)", text).group(1)
         tel_work = re.search("W: (.*)", text).group(1)
         tel_fax = re.search("F: (.*)", text).group(1)
