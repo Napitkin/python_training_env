@@ -1,6 +1,7 @@
 from model.user import User
 import re
 
+
 class UserHelper:
     def __init__(self, app):
         self.app = app
@@ -59,6 +60,9 @@ class UserHelper:
         wd.find_element_by_name("lastname").clear()
         wd.find_element_by_name("lastname").clear()
         wd.find_element_by_name("lastname").send_keys(user.last_name)
+        wd.find_element_by_name("address").click()
+        wd.find_element_by_name("address").clear()
+        wd.find_element_by_name("address").send_keys(user.address)
         wd.find_element_by_name("home").click()
         wd.find_element_by_name("home").clear()
         wd.find_element_by_name("home").send_keys(user.tel_home)
@@ -71,6 +75,15 @@ class UserHelper:
         wd.find_element_by_name("fax").click()
         wd.find_element_by_name("fax").clear()
         wd.find_element_by_name("fax").send_keys(user.tel_fax)
+        wd.find_element_by_name("email").click()
+        wd.find_element_by_name("email").clear()
+        wd.find_element_by_name("email").send_keys(user.email)
+        wd.find_element_by_name("email2").click()
+        wd.find_element_by_name("email2").clear()
+        wd.find_element_by_name("email2").send_keys(user.email_2)
+        wd.find_element_by_name("email3").click()
+        wd.find_element_by_name("email3").clear()
+        wd.find_element_by_name("email3").send_keys(user.email_3)
 
     def open_homepage(self):
         wd = self.app.wd
@@ -107,12 +120,15 @@ class UserHelper:
             self.user_cache = []
             for element in wd.find_elements_by_name("entry"):
                 blocks = element.find_elements_by_tag_name("td")
-                first_name = blocks[2].text
                 last_name = blocks[1].text
+                first_name = blocks[2].text
                 id = blocks[0].find_element_by_tag_name("input").get_attribute("value")
-                all_phones = blocks[5].text.splitlines()
+                address = blocks[3].text
+                all_emails = blocks[4].text
+                all_phones = blocks[5].text
                 # Фамилия, Имя, id
-                self.user_cache.append(User(first_name=first_name, last_name=last_name, id=id, tel_home=all_phones[0], tel_mobile=all_phones[1], tel_work=all_phones[2]))
+                self.user_cache.append(User(first_name=first_name, last_name=last_name, address=address, id=id,
+                                            all_phones_from_home_page=all_phones, all_emails_from_home_page=all_emails))
         # Возвращеам не сам кэш, а его копию
         return list(self.user_cache)
 
@@ -125,13 +141,17 @@ class UserHelper:
         wd.find_element_by_xpath("//img[@alt='Edit']").click()
         first_name = wd.find_element_by_name("firstname").get_attribute("value")
         last_name = wd.find_element_by_name("lastname").get_attribute("value")
+        address = wd.find_element_by_name("address").get_attribute("value")
         id = wd.find_element_by_name("id").get_attribute("value")
         tel_home = wd.find_element_by_name("home").get_attribute("value")
         tel_mobile = wd.find_element_by_name("mobile").get_attribute("value")
         tel_work = wd.find_element_by_name("work").get_attribute("value")
         tel_fax = wd.find_element_by_name("fax").get_attribute("value")
-        return User(first_name=first_name, last_name=last_name, id=id,
-                    tel_home=tel_home, tel_mobile=tel_mobile, tel_work=tel_work, tel_fax=tel_fax)
+        email = wd.find_element_by_name("email").get_attribute("value")
+        email_2 = wd.find_element_by_name("email2").get_attribute("value")
+        email_3 = wd.find_element_by_name("email3").get_attribute("value")
+        return User(first_name=first_name, last_name=last_name, address=address, id=id,
+                    tel_home=tel_home, tel_mobile=tel_mobile, tel_work=tel_work, tel_fax=tel_fax, email=email, email_2=email_2, email_3=email_3)
 
     def get_user_from_view_page(self, index):
         wd = self.app.wd
@@ -142,4 +162,3 @@ class UserHelper:
         tel_work = re.search("W: (.*)", text).group(1)
         tel_fax = re.search("F: (.*)", text).group(1)
         return User(tel_home=tel_home, tel_mobile=tel_mobile, tel_work=tel_work, tel_fax=tel_fax)
-
