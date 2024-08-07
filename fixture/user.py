@@ -23,10 +23,8 @@ class UserHelper:
     def modify_user_by_index(self, index, user):
         wd = self.app.wd
         self.open_homepage()
-        # select random user
-        self.select_user_by_index(index)
-        # click button 'Edit"
-        wd.find_element_by_xpath("//img[@alt='Edit']").click()
+        # find and click button 'Edit'
+        self.open_page_edit_by_index(index)
         # fill user form
         self.method_filling_user_form(user)
         # click button 'update" - modify user
@@ -34,8 +32,18 @@ class UserHelper:
         # После успешного метода (modify) кэш сбрасываем
         self.user_cache = None
 
+    def open_page_edit_by_index(self, index):
+        wd = self.app.wd
+        self.select_user_by_index(index)
+        elements = wd.find_elements_by_name("entry")
+        if index < len(elements):
+            element = elements[index]
+            # Find and click button 'Edit'
+            element.find_element_by_xpath("//img[@alt='Edit']").click()
+
     def select_user_by_index(self, index):
         wd = self.app.wd
+        self.open_homepage()
         # Получение всех checkbox's по index - порядковому номеру
         wd.find_elements_by_name("selected[]")[index].click()
 
@@ -157,7 +165,7 @@ class UserHelper:
         wd = self.app.wd
         self.open_user_view_by_index(index)
         text = wd.find_element_by_id("content").text
-        tel_home = re.search("H:(.*)", text).group(1)
+        tel_home = re.search("H: (.*)", text).group(1)
         tel_mobile = re.search("M: (.*)", text).group(1)
         tel_work = re.search("W: (.*)", text).group(1)
         tel_fax = re.search("F: (.*)", text).group(1)
