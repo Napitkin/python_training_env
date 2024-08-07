@@ -1,12 +1,32 @@
 # -*- coding: utf-8 -*-
 from model.user import User
+import pytest
+import random
+import string
 
 
-def test_create_user(app):
+def random_string(prefix, maxlen):
+    symbol = string.ascii_letters + string.digits + " " * 10
+    return prefix + "".join([random.choice(symbol) for i in range(random.randrange(maxlen))])
+
+
+def random_number(prefix, maxlen):
+    symbol = string.digits + "" * 3
+    return prefix + "".join([random.choice(symbol) for i in range(random.randrange(maxlen))])
+
+
+test_data = [
+    User(first_name=random_string("firstname", 10), last_name=random_string("lastname", 10), address=random_string("address", 30),
+         tel_home=random_string("home", 20), tel_mobile=random_number("mobile", 20), tel_work=random_number("work", 20),
+         email=random_string("email", 20), email_2=random_string("email2", 20), email_3=random_string("email3", 20))
+    for i in range(4)
+]
+
+
+@pytest.mark.parametrize("user", test_data, ids=[repr(x) for x in test_data])
+def test_create_user(app, user):
     # Загружаем список пользователей
     old_users = app.user.get_user_list()
-    user = User("Kirill", "Napitkin", "Moscow Kremlin str.", "7777777", "2222222222", "55555555", "99900009",
-                "k_mail@mail.ru", "k_mail_2@mail.ru", "k_mail_3@mail.ru")
     # Создаем нового пользователя
     app.user.create(user)
     # Снова загружаем список пользователей
