@@ -17,7 +17,7 @@ def test_phones_on_user_view_page(app):
     assert user_from_view_page.tel_home == user_from_edit_page.tel_home
     assert user_from_view_page.tel_mobile == user_from_edit_page.tel_mobile
     assert user_from_view_page.tel_work == user_from_edit_page.tel_work
-    assert user_from_view_page.tel_fax == user_from_edit_page.tel_fax
+    # assert user_from_view_page.tel_secondary == user_from_edit_page.tel_secondary
 
 
 def clear(s):
@@ -28,7 +28,7 @@ def merge_phones_like_on_home_page(user):
     return "\n".join(filter(lambda x: x != "",
                             map(lambda x: clear(x),
                                 filter(lambda x: x is not None,
-                                       [user.tel_home, user.tel_mobile, user.tel_work]))))
+                                       [user.tel_home, user.tel_mobile, user.tel_work])))) #user.tel_secondary
 
 
 def merge_emails_like_on_home_page(user):

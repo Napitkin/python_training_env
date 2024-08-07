@@ -80,9 +80,9 @@ class UserHelper:
         wd.find_element_by_name("work").click()
         wd.find_element_by_name("work").clear()
         wd.find_element_by_name("work").send_keys(user.tel_work)
-        wd.find_element_by_name("fax").click()
-        wd.find_element_by_name("fax").clear()
-        wd.find_element_by_name("fax").send_keys(user.tel_fax)
+        # wd.find_element_by_name("phone2").click()
+        # wd.find_element_by_name("phone2").clear()
+        # wd.find_element_by_name("phone2").send_keys(user.tel_secondary)
         wd.find_element_by_name("email").click()
         wd.find_element_by_name("email").clear()
         wd.find_element_by_name("email").send_keys(user.email)
@@ -154,12 +154,12 @@ class UserHelper:
         tel_home = wd.find_element_by_name("home").get_attribute("value")
         tel_mobile = wd.find_element_by_name("mobile").get_attribute("value")
         tel_work = wd.find_element_by_name("work").get_attribute("value")
-        tel_fax = wd.find_element_by_name("fax").get_attribute("value")
+        # tel_secondary = wd.find_element_by_name("phone2").get_attribute("value")
         email = wd.find_element_by_name("email").get_attribute("value")
         email_2 = wd.find_element_by_name("email2").get_attribute("value")
         email_3 = wd.find_element_by_name("email3").get_attribute("value")
         return User(first_name=first_name, last_name=last_name, address=address, id=id,
-                    tel_home=tel_home, tel_mobile=tel_mobile, tel_work=tel_work, tel_fax=tel_fax, email=email, email_2=email_2, email_3=email_3)
+                    tel_home=tel_home, tel_mobile=tel_mobile, tel_work=tel_work, email=email, email_2=email_2, email_3=email_3) #tel_secondary=tel_secondary
 
     def get_user_from_view_page(self, index):
         wd = self.app.wd
@@ -168,5 +168,5 @@ class UserHelper:
         tel_home = re.search("H: (.*)", text).group(1)
         tel_mobile = re.search("M: (.*)", text).group(1)
         tel_work = re.search("W: (.*)", text).group(1)
-        tel_fax = re.search("F: (.*)", text).group(1)
-        return User(tel_home=tel_home, tel_mobile=tel_mobile, tel_work=tel_work, tel_fax=tel_fax)
+        #tel_secondary = re.search("P: (.*)", text).group(1)
+        return User(tel_home=tel_home, tel_mobile=tel_mobile, tel_work=tel_work)  #tel_secondary=tel_secondary

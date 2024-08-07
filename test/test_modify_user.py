@@ -5,7 +5,7 @@ from random import randrange
 def test_modify_first_user(app):
     if app.user.count() == 0:
         app.user.create(
-            User(first_name="test", last_name="123", address="123", tel_home="123", tel_mobile="123", tel_work="123", tel_fax="232399988774",
+            User(first_name="test", last_name="123", address="123", tel_home="123", tel_mobile="123", tel_work="123", tel_secondary="232399988774",
                  email="kmail@mail.ru", email_2="kmail_2@mail.ru", email_3="kmail_3@mail.ru"))
     old_users = app.user.get_user_list()
     index = randrange(len(old_users))
