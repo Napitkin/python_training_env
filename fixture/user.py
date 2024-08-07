@@ -22,28 +22,24 @@ class UserHelper:
 
     def modify_user_by_index(self, index, user):
         wd = self.app.wd
-        self.open_homepage()
         # find and click button 'Edit'
         self.open_page_edit_by_index(index)
         # fill user form
         self.method_filling_user_form(user)
         # click button 'update" - modify user
         wd.find_element_by_name("update").click()
+        self.open_homepage()
         # После успешного метода (modify) кэш сбрасываем
         self.user_cache = None
 
+    # find and click button 'Edit'
     def open_page_edit_by_index(self, index):
         wd = self.app.wd
-        self.select_user_by_index(index)
-        elements = wd.find_elements_by_name("entry")
-        if index < len(elements):
-            element = elements[index]
-            # Find and click button 'Edit'
-            element.find_element_by_xpath("//img[@alt='Edit']").click()
+        self.open_homepage()
+        wd.find_elements_by_xpath("//img[@alt='Edit']")[index].click()
 
     def select_user_by_index(self, index):
         wd = self.app.wd
-        self.open_homepage()
         # Получение всех checkbox's по index - порядковому номеру
         wd.find_elements_by_name("selected[]")[index].click()
 
@@ -80,9 +76,6 @@ class UserHelper:
         wd.find_element_by_name("work").click()
         wd.find_element_by_name("work").clear()
         wd.find_element_by_name("work").send_keys(user.tel_work)
-        # wd.find_element_by_name("phone2").click()
-        # wd.find_element_by_name("phone2").clear()
-        # wd.find_element_by_name("phone2").send_keys(user.tel_secondary)
         wd.find_element_by_name("email").click()
         wd.find_element_by_name("email").clear()
         wd.find_element_by_name("email").send_keys(user.email)
@@ -130,7 +123,7 @@ class UserHelper:
                 blocks = element.find_elements_by_tag_name("td")
                 last_name = blocks[1].text
                 first_name = blocks[2].text
-                id = blocks[0].find_element_by_tag_name("input").get_attribute("value")
+                id = element.find_element_by_name("selected[]").get_attribute("value")
                 address = blocks[3].text
                 all_emails = blocks[4].text
                 all_phones = blocks[5].text
@@ -154,12 +147,11 @@ class UserHelper:
         tel_home = wd.find_element_by_name("home").get_attribute("value")
         tel_mobile = wd.find_element_by_name("mobile").get_attribute("value")
         tel_work = wd.find_element_by_name("work").get_attribute("value")
-        # tel_secondary = wd.find_element_by_name("phone2").get_attribute("value")
         email = wd.find_element_by_name("email").get_attribute("value")
         email_2 = wd.find_element_by_name("email2").get_attribute("value")
         email_3 = wd.find_element_by_name("email3").get_attribute("value")
         return User(first_name=first_name, last_name=last_name, address=address, id=id,
-                    tel_home=tel_home, tel_mobile=tel_mobile, tel_work=tel_work, email=email, email_2=email_2, email_3=email_3) #tel_secondary=tel_secondary
+                    tel_home=tel_home, tel_mobile=tel_mobile, tel_work=tel_work, email=email, email_2=email_2, email_3=email_3)
 
     def get_user_from_view_page(self, index):
         wd = self.app.wd
@@ -168,5 +160,4 @@ class UserHelper:
         tel_home = re.search("H: (.*)", text).group(1)
         tel_mobile = re.search("M: (.*)", text).group(1)
         tel_work = re.search("W: (.*)", text).group(1)
-        #tel_secondary = re.search("P: (.*)", text).group(1)
-        return User(tel_home=tel_home, tel_mobile=tel_mobile, tel_work=tel_work)  #tel_secondary=tel_secondary
+        return User(tel_home=tel_home, tel_mobile=tel_mobile, tel_work=tel_work)

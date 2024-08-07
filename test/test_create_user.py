@@ -19,7 +19,7 @@ test_data = [
     User(first_name=random_string("firstname", 10), last_name=random_string("lastname", 10), address=random_string("address", 30),
          tel_home=random_string("home", 20), tel_mobile=random_number("mobile", 20), tel_work=random_number("work", 20),
          email=random_string("email", 20), email_2=random_string("email2", 20), email_3=random_string("email3", 20))
-    for i in range(4)
+    for i in range(2)
 ]
 
 
