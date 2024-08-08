@@ -17,22 +17,20 @@ def test_phones_on_user_view_page(app):
     assert user_from_view_page.tel_home == user_from_edit_page.tel_home
     assert user_from_view_page.tel_mobile == user_from_edit_page.tel_mobile
     assert user_from_view_page.tel_work == user_from_edit_page.tel_work
-    # assert user_from_view_page.tel_secondary == user_from_edit_page.tel_secondary
 
 
 def clear(s):
-    return re.sub("[()  -]", "", s)
+    return re.sub("[() -]", "", s)
 
 
 def merge_phones_like_on_home_page(user):
     return "\n".join(filter(lambda x: x != "",
                             map(lambda x: clear(x),
                                 filter(lambda x: x is not None,
-                                       [user.tel_home, user.tel_mobile, user.tel_work])))) #user.tel_secondary
+                                       [user.tel_home, user.tel_mobile, user.tel_work]))))
 
 
 def merge_emails_like_on_home_page(user):
     return "\n".join(filter(lambda x: x != "",
-                            map(lambda x: clear(x),
-                                filter(lambda x: x is not None,
-                                       [user.email, user.email_2, user.email_3]))))
+                            filter(lambda x: x is not None,
+                                   [user.email, user.email_2, user.email_3])))

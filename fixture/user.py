@@ -103,8 +103,7 @@ class UserHelper:
     def open_user_view_by_index(self, index):
         wd = self.app.wd
         self.open_homepage()
-        self.select_user_by_index(index)
-        wd.find_element_by_xpath("//img[@alt='Details']").click()
+        wd.find_elements_by_xpath("//img[@alt='Details']")[index].click()
 
     def count(self):
         wd = self.app.wd
@@ -136,10 +135,8 @@ class UserHelper:
     # Читаем данные (фамилия, имя, телефоны) в окне редактирование пользователя.
     def get_user_info_from_edit_page(self, index):
         wd = self.app.wd
-        self.open_homepage()
+        self.open_page_edit_by_index(index)
         # select random user
-        self.select_user_by_index(index)
-        wd.find_element_by_xpath("//img[@alt='Edit']").click()
         first_name = wd.find_element_by_name("firstname").get_attribute("value")
         last_name = wd.find_element_by_name("lastname").get_attribute("value")
         address = wd.find_element_by_name("address").get_attribute("value")

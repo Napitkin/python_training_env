@@ -6,13 +6,13 @@ import string
 
 
 def random_string(prefix, maxlen):
-    symbol = string.ascii_letters + string.digits + " " * 10
-    return prefix + "".join([random.choice(symbol) for i in range(random.randrange(maxlen))])
+    symbols = string.ascii_letters + string.digits + string.punctuation + " " * 10
+    return prefix + "".join([random.choice(symbols) for i in range(random.randrange(maxlen))])
 
 
 def random_number(prefix, maxlen):
-    symbol = string.digits + "" * 3
-    return prefix + "".join([random.choice(symbol) for i in range(random.randrange(maxlen))])
+    symbols = string.digits + "" * 3
+    return prefix + "".join([random.choice(symbols) for i in range(random.randrange(maxlen))])
 
 
 test_data = [

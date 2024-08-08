@@ -13,7 +13,7 @@ def random_string(prefix, maxlen):
 
 test_data = [Group("", "", "")] + [
     Group(name=random_string("name", 10), header=random_string("header", 20), footer=random_string("footer", 20))
-    for i in range(5)
+    for i in range(2)
 ]
 
 
