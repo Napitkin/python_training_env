@@ -22,7 +22,7 @@ class Application:
 
     def is_valid(self):
         try:
-            self.wd.urrent_url
+            self.wd.сurrent_url
             return True
         except:
             return False
