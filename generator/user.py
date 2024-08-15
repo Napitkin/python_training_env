@@ -25,17 +25,17 @@ for o, a in opts:
 
 def random_string(prefix, maxlen):
     symbols = string.ascii_letters + string.digits + string.punctuation + " " * 10
-    return prefix + "".join([random.choice(symbols) for i in range(random.randrange(maxlen))])
+    return prefix.join([random.choice(symbols) for i in range(random.randrange(maxlen))])
 
 
 def random_number(prefix, maxlen):
-    symbols = string.digits + "" * 3
-    return prefix + "".join([random.choice(symbols) for i in range(random.randrange(maxlen))])
+    symbols = string.digits
+    return prefix.join([random.choice(symbols) for i in range(random.randrange(maxlen))])
 
 
 test_data = [
     User(first_name=random_string("firstname", 10), last_name=random_string("lastname", 10), address=random_string("address", 30),
-         tel_home=random_string("home", 20), tel_mobile=random_number("mobile", 20), tel_work=random_number("work", 20),
+         tel_home=random_number("home", 20), tel_mobile=random_number("mobile", 20), tel_work=random_number("work", 20),
          email=random_string("email", 20), email_2=random_string("email2", 20), email_3=random_string("email3", 20))
     for i in range(n)
 ]

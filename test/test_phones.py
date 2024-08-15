@@ -1,4 +1,5 @@
 import re
+from model.user import User
 
 
 def test_names_emails_phones_and_address_on_home_page(app):
@@ -17,6 +18,16 @@ def test_phones_on_user_view_page(app):
     assert user_from_view_page.tel_home == user_from_edit_page.tel_home
     assert user_from_view_page.tel_mobile == user_from_edit_page.tel_mobile
     assert user_from_view_page.tel_work == user_from_edit_page.tel_work
+
+
+def test_all_user_data_on_home_page(app, db):
+    if app.user.count() == 0:
+        app.user.create(
+            User("test", "123", "Moscow Dmt.", "4444", "6666666", "45446464",
+                 "nmail22222@mail.ru", "nmail_444444@mail.ru", "nmail_888888@mail.ru"))
+    users_from_db = db.get_user_list()
+    users_from_home_page = app.user.get_user_list()
+    assert sorted(users_from_db, key=User.id_or_max) == sorted(users_from_home_page, key=User.id_or_max)
 
 
 def clear(s):

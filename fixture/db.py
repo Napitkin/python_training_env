@@ -1,6 +1,7 @@
 import pymysql.cursors
 from model.group import Group
 from model.user import User
+from test.test_phones import merge_phones_like_on_home_page, merge_emails_like_on_home_page
 
 
 class DbFixture:
@@ -24,18 +25,29 @@ class DbFixture:
             cursor.close()
         return group_list
 
+
     # Загружаем из БД инф. о пользователях
     def get_user_list(self):
         user_list = []
         cursor = self.connection.cursor()
         try:
-            cursor.execute("select id, firstname, lastname from addressbook")
+            cursor.execute("select id, firstname, lastname, address, home, mobile, work, email, email2, email3  from addressbook")
             for row in cursor:
-                (id, firstname, lastname) = row
-                user_list.append(User(id=str(id), first_name=firstname, last_name=lastname))
+                (id, firstname, lastname, address, home, mobile, work, email, email2, email3) = row
+                user_list.append(User(id=str(id), first_name=firstname, last_name=lastname, address=address,
+                                      tel_home=home, tel_mobile=mobile, tel_work=work, email=email, email_2=email2, email_3=email3))
         finally:
             cursor.close()
+
+        for user in user_list:
+            phones = merge_phones_like_on_home_page(user)
+            emails = merge_emails_like_on_home_page(user)
+            user.all_phones_from_home_page = phones
+            user.all_emails_from_home_page = emails
+
         return user_list
 
     def destroy(self):
         self.connection.close()
+
+

@@ -32,16 +32,37 @@ class UserHelper:
         # После успешного метода (modify) кэш сбрасываем
         self.user_cache = None
 
+    def modify_user_by_id(self, user, id):
+        wd = self.app.wd
+        # find and click button 'Edit'
+        self.open_page_edit_by_id(id)
+        # fill user form
+        self.method_filling_user_form(user)
+        # click button 'update" - modify user
+        wd.find_element_by_name("update").click()
+        self.open_homepage()
+        # После успешного метода (modify) кэш сбрасываем
+        self.user_cache = None
+
     # find and click button 'Edit'
     def open_page_edit_by_index(self, index):
         wd = self.app.wd
         self.open_homepage()
         wd.find_elements_by_xpath("//img[@alt='Edit']")[index].click()
 
+    def open_page_edit_by_id(self, id):
+        wd = self.app.wd
+        self.open_homepage()
+        wd.find_element_by_css_selector(f'a[href="edit.php?id={id}"]').click()
+
     def select_user_by_index(self, index):
         wd = self.app.wd
         # Получение всех checkbox's по index - порядковому номеру
         wd.find_elements_by_name("selected[]")[index].click()
+
+    def select_user_by_id(self, id):
+        wd = self.app.wd
+        wd.find_element_by_css_selector("input[value='%s']" % id).click()
 
     def delete_first_user(self):
         self.delete_user_by_index(0)
@@ -50,6 +71,15 @@ class UserHelper:
         wd = self.app.wd
         self.open_homepage()
         self.select_user_by_index(index)
+        # submit deletion
+        wd.find_element_by_xpath("//input[@value='Delete']").click()
+        # После успешного метода (delete) кэш сбрасываем
+        self.user_cache = None
+
+    def delete_user_by_id(self, id):
+        wd = self.app.wd
+        self.open_homepage()
+        self.select_user_by_id(id)
         # submit deletion
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         # После успешного метода (delete) кэш сбрасываем

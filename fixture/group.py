@@ -90,13 +90,27 @@ class GroupHelper:
         # После успешного метода (delete) кэш сбрасываем
         self.group_cache = None
 
-    def modify_first_group(self):
-        self.modify_group_by_index(0)
+    def modify_first_group(self, new_group_data):
+        self.modify_group_by_index(new_group_data, 0)
 
-    def modify_group_by_index(self, index, new_group_data):
+    def modify_group_by_index(self, new_group_data, index):
         wd = self.app.wd
         self.open_groups_page()
         self.select_group_by_index(index)
+        # open modification form
+        wd.find_element_by_name("edit").click()
+        # fill group form
+        self.fill_group_form(new_group_data)
+        # submit modification
+        wd.find_element_by_name("update").click()
+        self.return_to_groups_page()
+        # После успешного метода (modify) кэш сбрасываем
+        self.group_cache = None
+
+    def modify_group_by_id(self, new_group_data, id):
+        wd = self.app.wd
+        self.open_groups_page()
+        self.select_group_by_id(id)
         # open modification form
         wd.find_element_by_name("edit").click()
         # fill group form

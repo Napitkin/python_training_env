@@ -9,4 +9,4 @@ try:
         print(item)
     print(len(l))
 finally:
-    pass # db.destroy()
+    pass
