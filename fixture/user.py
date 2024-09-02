@@ -1,5 +1,6 @@
 from model.user import User
 import re
+from selenium.webdriver.support.select import Select
 
 
 class UserHelper:
@@ -44,7 +45,6 @@ class UserHelper:
         # После успешного метода (modify) кэш сбрасываем
         self.user_cache = None
 
-    # find and click button 'Edit'
     def open_page_edit_by_index(self, index):
         wd = self.app.wd
         self.open_homepage()
@@ -188,3 +188,17 @@ class UserHelper:
         tel_mobile = re.search("M: (.*)", text).group(1)
         tel_work = re.search("W: (.*)", text).group(1)
         return User(tel_home=tel_home, tel_mobile=tel_mobile, tel_work=tel_work)
+
+    def add_user_to_group(self, user, group):
+        wd = self.app.wd
+        self.open_homepage()
+        self.select_user_by_id(user.id)
+        wd.find_element_by_name("to_group").click()
+        Select(wd.find_element_by_name("to_group")).select_by_visible_text(group.name)
+        wd.find_element_by_name("add").click()
+
+    # def delete_user_from_group(self, user, group):
+    #     wd = self.app.wd
+    #     self.open_homepage()
+    #     self.select_user_by_id(user.id)
+    #     wd.find_element_by_name("remove").click()
