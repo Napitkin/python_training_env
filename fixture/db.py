@@ -47,17 +47,17 @@ class DbFixture:
 
         return user_list
 
-    def get_link_list(self):
-        link_list = []
-        cursor = self.connection.cursor()
-        try:
-            cursor.execute("select id, group_id, from address_in_groups")
-            for row in cursor:
-                (id, group_id) = row
-                link_list.append((str(id), str(group_id)))
-        finally:
-            cursor.close()
-        return link_list
+    # def get_link_list(self):
+    #     link_list = []
+    #     cursor = self.connection.cursor()
+    #     try:
+    #         cursor.execute("select id, group_id, from address_in_groups")
+    #         for row in cursor:
+    #             (id, group_id) = row
+    #             link_list.append((str(id), str(group_id)))
+    #     finally:
+    #         cursor.close()
+    #     return link_list
 
 
     def destroy(self):
