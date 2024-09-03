@@ -197,8 +197,9 @@ class UserHelper:
         Select(wd.find_element_by_name("to_group")).select_by_visible_text(group.name)
         wd.find_element_by_name("add").click()
 
-    # def delete_user_from_group(self, user, group):
-    #     wd = self.app.wd
-    #     self.open_homepage()
-    #     self.select_user_by_id(user.id)
-    #     wd.find_element_by_name("remove").click()
+    def delete_user_from_group(self, user, group):
+        wd = self.app.wd
+        self.open_homepage()
+        self.select_user_by_id(user.id)
+        Select(wd.find_element_by_name("group")).select_by_visible_text(group.name)
+        wd.find_element_by_name("remove").click()

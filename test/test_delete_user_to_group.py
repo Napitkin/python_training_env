@@ -3,7 +3,7 @@ from model.group import Group
 from model.user import User
 
 
-def test_add_user_to_group(app, db, orm):
+def test_delete_user_from_group(app, db, orm):
     if len(db.get_group_list()) == 0:
         app.group.create(Group(name="test"))
     if len(db.get_user_list()) == 0:
@@ -13,7 +13,6 @@ def test_add_user_to_group(app, db, orm):
     old_users = orm.get_user_list()
     group = random.choice(old_groups)
     user = random.choice(old_users)
-    app.user.add_user_to_group(user, group)
+    app.user.delete_user_from_group(user, group)
     new_groups = orm.get_group_list()
     assert len(old_groups) == len(new_groups)
-    assert group in new_groups
