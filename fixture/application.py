@@ -22,7 +22,7 @@ class Application:
 
     def is_valid(self):
         try:
-            self.wd.current_url
+            self.wd.current_url # проверка, что браузер открыт
             return True
         except:
             return False
