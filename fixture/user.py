@@ -193,9 +193,13 @@ class UserHelper:
         wd = self.app.wd
         self.open_homepage()
         self.select_user_by_id(user.id)
-        wd.find_element_by_name("to_group").click()
-        Select(wd.find_element_by_name("to_group")).select_by_visible_text(group.name)
-        wd.find_element_by_name("add").click()
+        self.select_group_to_add(group.id)
+        self.open_homepage()
+
+    def select_group_to_add(self, group_id): #1
+        wd = self.app.wd
+        wd.find_element_by_xpath("//select[@name='to_group']/option[@value='%s']" % group_id).click()
+        wd.find_element_by_xpath("//input[@type='submit' and @value='Add to']").click()
 
     def delete_user_from_group(self, user, group):
         wd = self.app.wd
