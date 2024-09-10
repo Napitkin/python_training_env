@@ -1,6 +1,5 @@
 from model.user import User
 import re
-from selenium.webdriver.support.select import Select
 
 
 class UserHelper:
@@ -192,9 +191,9 @@ class UserHelper:
     def add_user_to_group(self, user, group):
         wd = self.app.wd
         self.open_homepage()
-        self.select_user_by_id(user.id)
-        self.select_group_to_add(group.id)
-        self.open_homepage()
+        self.select_user_by_id(user)
+        self.select_group_to_add(group)
+        self.user_cache = None
 
     def select_group_to_add(self, group_id): #1
         wd = self.app.wd
@@ -204,6 +203,7 @@ class UserHelper:
     def delete_user_from_group(self, user, group):
         wd = self.app.wd
         self.open_homepage()
-        self.select_user_by_id(user.id)
-        Select(wd.find_element_by_name("group")).select_by_visible_text(group.name)
+        wd.find_element_by_name("group").find_element_by_css_selector("option[value='%s']" % group).click()
+        self.select_user_by_id(user)
         wd.find_element_by_name("remove").click()
+        self.user_cache = None
